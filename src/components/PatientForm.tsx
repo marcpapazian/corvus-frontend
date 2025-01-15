@@ -7,24 +7,28 @@ interface PatientFormProps {
 }
 
 const PatientForm: React.FC<PatientFormProps> = ({ onAddPatient }) => {
-    const [formData, setFormData] = useState<Patient>({
+    const initialState: Patient = {
+        id: String(Date.now()),
         name: '',
         age: 0,
         gender: 'male',
         bmi: 0,
         reason: '',
-        needsReview: true, // Defaulted to needing review
+        needsReview: true,
+        isCandidate: false,
         assignedTo: '',
-        received: 'Just Now',
         referringProvider: '',
         referralNotes: '',
         surgeryType: '',
+        surgeryRequirements: [],
         medicalHistory: [],
         medications: [],
         requiredDocuments: [],
         lastUpdated: new Date(),
-        notes: [],
-    });
+        notes: []
+    };
+
+    const [formData, setFormData] = useState<Patient>(initialState);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -33,7 +37,28 @@ const PatientForm: React.FC<PatientFormProps> = ({ onAddPatient }) => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onAddPatient({ ...formData, lastUpdated: new Date() });
+        const newPatient: Patient = {
+            id: String(Date.now()),  // temporary ID
+            name: "New Patient",
+            age: 30,
+            gender: "male",
+            bmi: 25,
+            reason: "Initial consultation",
+            needsReview: true,
+            isCandidate: false,  // Add this
+            assignedTo: "Dr. Smith",
+            referringProvider: "Dr. Jones",
+            referralNotes: "Initial referral",
+            surgeryType: "General",
+            surgeryRequirements: [],  // Add this
+            medicalHistory: [],
+            medications: [],
+            requiredDocuments: [],
+            lastUpdated: new Date(),
+            notes: []
+            // Remove 'received' property as it's not in the Patient type
+        };
+        onAddPatient(newPatient);
     };
 
     return (
