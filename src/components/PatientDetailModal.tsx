@@ -9,7 +9,8 @@ import {
     CheckCircleIcon,
     ExclamationCircleIcon,
     DocumentArrowDownIcon,
-    PlusCircleIcon
+    PlusCircleIcon,
+    ArrowTopRightOnSquareIcon
 } from '@heroicons/react/24/outline';
 import DocumentRequestGenerator from './DocumentRequestGenerator';
 
@@ -44,19 +45,68 @@ const formatDate = (date: Date | string | undefined) => {
 };
 
 const PatientDetailModal: React.FC<PatientDetailModalProps> = ({ patient, onClose, onUpdateStatus }) => {
+    const openEHR = () => {
+        if (!patient?.ehrId) return;
+        const ehrBaseUrl = 'https://ehr.example.com/patient/';
+        window.open(`${ehrBaseUrl}${patient.ehrId}`, '_blank');
+    };
+
     if (!patient) return null;
+
+    const getReferralTypeDisplay = (type: 'self' | 'external' | 'internal') => {
+        const displays = {
+            'self': 'Self',
+            'external': 'External',
+            'internal': 'Internal'
+        };
+        return displays[type] || 'Unknown';
+    };
+
+    const getReferralTypeStyles = (type: 'self' | 'external' | 'internal') => {
+        const styles = {
+            'internal': 'bg-blue-100 text-blue-800',
+            'external': 'bg-purple-100 text-purple-800',
+            'self': 'bg-green-100 text-green-800'
+        };
+        return styles[type] || 'bg-gray-100 text-gray-800';
+    };
+
+    const referralTypeDisplay = patient.referralType 
+        ? patient.referralType.charAt(0).toUpperCase() + patient.referralType.slice(1)
+        : 'Unknown';
+
+    const scheduledDateDisplay = patient.scheduledDate 
+        ? new Date(patient.scheduledDate).toLocaleDateString()
+        : 'Not scheduled';
+
+    const reviewedDateDisplay = patient.reviewedAt
+        ? new Date(patient.reviewedAt).toLocaleDateString()
+        : 'Not reviewed';
 
     return (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-start overflow-y-auto z-50 p-4">
             <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl relative my-4">
                 {/* Header */}
                 <div className="bg-gradient-to-r from-blue-500 to-blue-600 p-6 text-white sticky top-0 z-10">
-                    <button
-                        className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors"
-                        onClick={onClose}
-                    >
-                        <XMarkIcon className="h-6 w-6" />
-                    </button>
+                    {/* Add buttons container */}
+                    <div className="absolute top-4 right-4 flex items-center gap-2">
+                        {/* EHR Button */}
+                        <button
+                            onClick={openEHR}
+                            className="flex items-center gap-1 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-md transition-colors text-sm"
+                        >
+                            <ArrowTopRightOnSquareIcon className="h-4 w-4" />
+                            Open EHR
+                        </button>
+                        {/* Close Button */}
+                        <button
+                            className="text-white/80 hover:text-white transition-colors"
+                            onClick={onClose}
+                        >
+                            <XMarkIcon className="h-6 w-6" />
+                        </button>
+                    </div>
+                    
                     <div className="flex items-start gap-4">
                         <UserCircleIcon className="h-16 w-16" />
                         <div>
@@ -86,9 +136,19 @@ const PatientDetailModal: React.FC<PatientDetailModalProps> = ({ patient, onClos
                             </div>
                             {/* Provider Info */}
                             <div className="bg-gray-50 rounded-lg p-4">
-                                <h3 className="text-md font-semibold text-gray-900 mb-2">Providers</h3>
-                                <p className="text-sm text-gray-600">Assigned: <span className="font-medium text-gray-900">{patient.assignedTo}</span></p>
-                                <p className="text-sm text-gray-600">Referring: <span className="font-medium text-gray-900">{patient.referringProvider}</span></p>
+                                <h3 className="text-md font-semibold text-gray-900 mb-2">Referral Information</h3>
+                                <p className="text-sm text-gray-600">
+                                    Type: 
+                                    <span className={`ml-2 px-2 py-0.5 rounded-full text-xs font-medium ${getReferralTypeStyles(patient.referralType)}`}>
+                                        {getReferralTypeDisplay(patient.referralType)} Referral
+                                    </span>
+                                </p>
+                                <p className="text-sm text-gray-600 mt-1">
+                                    From: <span className="font-medium text-gray-900">{patient.referringProvider || 'Unknown'}</span>
+                                </p>
+                                <p className="text-sm text-gray-600 mt-1">
+                                    Assigned To: <span className="font-medium text-gray-900">{patient.assignedTo || 'Unassigned'}</span>
+                                </p>
                             </div>
                         </div>
 

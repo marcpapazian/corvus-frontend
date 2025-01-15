@@ -1,32 +1,36 @@
 // src/services/api.ts
 import { Patient } from '../types/PatientTypes';
 
-const API_URL = process.env.NODE_ENV === 'production' 
-    ? '/api'  // for production
-    : 'http://localhost:4001/api';  // for development
+const API_URL = 'http://localhost:4001/api';  // Make this explicit for now
 
 export const fetchPatients = async (): Promise<Patient[]> => {
     try {
-        console.log('🔍 Fetching patients from:', `${API_URL}/patients`);
-        const response = await fetch(`${API_URL}/patients`, {
+        console.log('🔍 Attempting to fetch patients...');
+        const fullUrl = `${API_URL}/patients`;
+        console.log('📍 Fetching from:', fullUrl);
+        
+        const response = await fetch(fullUrl, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            credentials: 'include'
+            mode: 'cors'  // Add this explicitly
         });
+        
+        console.log('📡 Response status:', response.status);
         
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
+            console.error('❌ Error response:', errorData);
             throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.message || 'Unknown error'}`);
         }
         
         const data = await response.json();
-        console.log('✅ Fetched patients:', data);
+        console.log('✅ Fetched patients:', data.length);
         return data;
     } catch (error) {
-        console.error('❌ Error fetching patients:', error);
+        console.error('❌ Error in fetchPatients:', error);
         throw error;
     }
 };
