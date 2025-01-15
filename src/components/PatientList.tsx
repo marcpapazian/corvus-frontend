@@ -1,7 +1,7 @@
 // PatientList.tsx
 import React from 'react';
 import { Patient } from '../types/PatientTypes';
-import { ClockIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 
 interface PatientListProps {
     patients: Patient[];
@@ -39,7 +39,8 @@ const PatientList: React.FC<PatientListProps> = ({ patients, onPatientSelect, hi
                                 </span>
                             </div>
                         </div>
-                        <div className="space-y-2">
+
+                        <div className="mt-4 space-y-2">
                             <div className="flex items-center text-sm text-gray-500">
                                 <span className="w-20">Age:</span>
                                 <span className="font-medium text-gray-900">{patient.age}</span>
