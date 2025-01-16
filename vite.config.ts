@@ -10,5 +10,13 @@ export default defineConfig({
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx']
-  }
+  },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:4001',
+        changeOrigin: true,
+      },
+    },
+  },
 })

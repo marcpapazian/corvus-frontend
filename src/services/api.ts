@@ -8,7 +8,7 @@ export const fetchPatients = async (): Promise<Patient[]> => {
         console.log('🔍 Attempting to fetch patients...');
         const fullUrl = `${API_URL}/patients`;
         console.log('📍 Fetching from:', fullUrl);
-        
+
         const response = await fetch(fullUrl, {
             method: 'GET',
             headers: {
@@ -17,9 +17,9 @@ export const fetchPatients = async (): Promise<Patient[]> => {
             },
             mode: 'cors'  // Add this explicitly
         });
-        
+
         console.log('📡 Response status:', response.status);
-        
+
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
             console.error('❌ Error response:', errorData);
@@ -70,4 +70,32 @@ export const generateDocumentRequest = async (
     return Promise.resolve(
         `Dear ${referringProvider},\n\nI hope this email finds you well...`
     );
+
 };
+
+
+export const getChatCompletion = async (chat: string): Promise<any> => {
+    console.log('AHHHHHHHHHHHH')
+    try {
+        const response = await fetch(`${API_URL}/chat-completion`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ chat }),
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.message || 'Unknown error'}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error)
+        throw error;
+    }
+}

@@ -16,6 +16,7 @@ import {
 import DocumentRequestGenerator from './DocumentRequestGenerator';
 import SchedulingModal from './SchedulingModal';
 import ReviewStepper from './ReviewStepper';
+import {AIChat} from "./AIChatComponent";
 
 interface PatientDetailModalProps {
     patient: Patient;
@@ -90,11 +91,11 @@ const PatientDetailModal: React.FC<PatientDetailModalProps> = ({ patient, onClos
         return styles[type] || 'bg-gray-100 text-gray-800';
     };
 
-    const referralTypeDisplay = patient.referralType 
+    const referralTypeDisplay = patient.referralType
         ? patient.referralType.charAt(0).toUpperCase() + patient.referralType.slice(1)
         : 'Unknown';
 
-    const scheduledDateDisplay = patient.scheduledDate 
+    const scheduledDateDisplay = patient.scheduledDate
         ? new Date(patient.scheduledDate).toLocaleDateString()
         : 'Not scheduled';
 
@@ -292,7 +293,16 @@ const PatientDetailModal: React.FC<PatientDetailModalProps> = ({ patient, onClos
                                     ))}
                                 </div>
                             </div>
+
+                          {/* Chat Component */}
+                          <div className="bg-gray-50 rounded-lg p-4">
+                            <div className="flex justify-between items-center mb-3">
+                              <h3 className="text-md font-semibold text-gray-900">AI Assistant</h3>
+                            </div>
+                            <AIChat />
+                          </div>
                         </div>
+
                     </div>
 
                     {/* Right Column - Requirements & Documents */}
