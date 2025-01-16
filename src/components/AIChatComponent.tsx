@@ -303,7 +303,7 @@ export const AIChat = ({patient}: { patient: Patient }) => {
       <Description>Ask the AI Assistant to for suggestions for next steps, to fetch more data about the patient, or to
         find similar historical cases.</Description>
       <ChatTextBox onSend={handleSend}/>
-      <ActionSuggestions/>
+      {/*<ActionSuggestions/>*/}
       {showResponse && <Response loading={responseLoading} loadingPct={loadingPct} responseType={responseType}
                                  responseStat={responseStat}/>}
     </>
