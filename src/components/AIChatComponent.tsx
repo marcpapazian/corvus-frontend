@@ -257,8 +257,8 @@ export const AIChat = () => {
   const handleSend = async (chat: string) => {
     setShowResponse(true)
     setResponseLoading(true)
-    const x = await getChatCompletion(chat)
-    const response = x.response;
+    const rawResponse = await getChatCompletion(chat)
+    const response = rawResponse.response;
 
     let responseType = ResponseType.NO_RESPONSE
     let statText = ''
