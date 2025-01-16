@@ -1,7 +1,7 @@
 // src/services/api.ts
 import { Patient } from '../types/PatientTypes';
 
-const API_URL = 'http://localhost:4001/api';  // Make this explicit for now
+const API_URL = '/api';  // Make this explicit for now
 
 export const fetchPatients = async (): Promise<Patient[]> => {
     try {
@@ -74,8 +74,7 @@ export const generateDocumentRequest = async (
 };
 
 
-export const getChatCompletion = async (chat: string): Promise<any> => {
-    console.log('AHHHHHHHHHHHH')
+export const getChatCompletion = async (chat: string, patient: Patient): Promise<any> => {
     try {
         const response = await fetch(`${API_URL}/chat-completion`, {
             method: 'POST',
@@ -83,8 +82,9 @@ export const getChatCompletion = async (chat: string): Promise<any> => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ chat }),
-            credentials: 'include'
+            body: JSON.stringify({ chat, patient }),
+            credentials: 'include',
+            mode: 'cors'
         });
 
         if (!response.ok) {

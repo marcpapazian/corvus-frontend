@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import {XMarkIcon, ClipboardDocumentCheckIcon, MagnifyingGlassCircleIcon} from "@heroicons/react/24/outline";
+import {ClipboardDocumentCheckIcon, MagnifyingGlassCircleIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import {getChatCompletion} from "../services/api";
+import {Patient} from "../types/PatientTypes";
 
 // New file probably
 
@@ -247,7 +248,7 @@ enum ResponseType {
   REQUEST_RESPONSE,
 }
 
-export const AIChat = () => {
+export const AIChat = ({patient}: { patient: Patient }) => {
   const [showResponse, setShowResponse] = React.useState<boolean>(false)
   const [responseLoading, setResponseLoading] = React.useState<boolean>(true)
   const [loadingPct, setLoadingPct] = React.useState<number>(0)
@@ -257,7 +258,7 @@ export const AIChat = () => {
   const handleSend = async (chat: string) => {
     setShowResponse(true)
     setResponseLoading(true)
-    const rawResponse = await getChatCompletion(chat)
+    const rawResponse = await getChatCompletion(chat, patient)
     const response = rawResponse.response;
 
     let responseType = ResponseType.NO_RESPONSE

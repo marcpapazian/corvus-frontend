@@ -294,15 +294,15 @@ const PatientDetailModal: React.FC<PatientDetailModalProps> = ({ patient, onClos
                                 </div>
                             </div>
 
-                          {/* Chat Component */}
-                          <div className="bg-gray-50 rounded-lg p-4">
-                            <div className="flex justify-between items-center mb-3">
-                              <h3 className="text-md font-semibold text-gray-900">AI Assistant</h3>
-                            </div>
-                            <AIChat />
-                          </div>
-                        </div>
 
+                        </div>
+                        {/* Chat Component */}
+                        <div className="bg-gray-50 rounded-lg p-4">
+                            <div className="flex justify-between items-center mb-3">
+                                <h3 className="text-md font-semibold text-gray-900">AI Assistant</h3>
+                            </div>
+                            <AIChat patient={patient}/>
+                        </div>
                     </div>
 
                     {/* Right Column - Requirements & Documents */}
