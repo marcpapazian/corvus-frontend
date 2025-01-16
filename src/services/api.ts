@@ -1,9 +1,12 @@
 // src/services/api.ts
 import { Patient } from '../types/PatientTypes';
 
-const API_URL = process.env.NODE_ENV === 'production' 
-    ? '/api'  // for production
-    : 'http://localhost:4001/api';  // for development
+// const API_URL = process.env.NODE_ENV === 'production'
+//     ? '/api'  // for production
+//     : 'http://localhost:4001/api';  // for development
+
+const API_URL = '/api'
+
 
 export const fetchPatients = async (): Promise<Patient[]> => {
     try {
@@ -66,4 +69,32 @@ export const generateDocumentRequest = async (
     return Promise.resolve(
         `Dear ${referringProvider},\n\nI hope this email finds you well...`
     );
+
 };
+
+
+export const getChatCompletion = async (chat: string): Promise<any> => {
+    console.log('AHHHHHHHHHHHH')
+    try {
+        const response = await fetch(`${API_URL}/chat-completion`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ chat }),
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`HTTP error! status: ${response.status}, message: ${errorData.message || 'Unknown error'}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error)
+        throw error;
+    }
+}
