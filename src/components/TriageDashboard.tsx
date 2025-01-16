@@ -44,7 +44,7 @@ const TriageDashboard: React.FC = () => {
 
     useEffect(() => {
         loadPatients();
-        const interval = setInterval(loadPatients, 30000);
+        const interval = setInterval(loadPatients, 3000000);
         return () => clearInterval(interval);
     }, []);
 
